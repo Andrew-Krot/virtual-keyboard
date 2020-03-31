@@ -16,10 +16,11 @@ li {
 
 .container {
   max-width: 940px;
-  margin: 50px auto;
+  margin: 0 auto;
 }
 
 .textarea {
+  margin-top: 50px;
   width: 100%;
   height: 300px;
   resize: none;
@@ -58,7 +59,7 @@ li {
   position: relative;
 }
 
-.keyboard__key:active {
+.active {
   background: rgba(255, 255, 255, 0.12);
 }
 
@@ -84,8 +85,4 @@ li {
 
 .keyboard__key-active::after {
   background: #08ff00;
-}
-
-.keyboard__key-dark {
-  background: rgba(0, 0, 0, 0.25);
 }
