@@ -1,103 +1,155 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-undef */
 /* eslint-disable eol-last */
 
 
 // Create layout
 
-const container = document.createElement('div');
-container.className = 'container';
-document.body.prepend(container);
+const keyboardLayout = {
+  elements: {
+    container: null,
+    description: null,
+    textarea: null,
+    keyboard: null,
+    keys: [],
+  },
 
-const textarea = document.createElement('textarea');
-textarea.className = 'textarea';
-textarea.setAttribute('autofocus', 'autofocus');
-container.prepend(textarea);
+  eventHandlers: {
+    oninput: null,
+    onclose: null,
+  },
 
-const keyboard = document.createElement('div');
-keyboard.className = 'keyboard';
-container.append(keyboard);
+  properties: {
+    value: '',
+    capslock: false,
+  },
 
-const keyboardKeys = document.createElement('div');
-keyboardKeys.className = 'keyboard__keys';
-keyboard.append(keyboardKeys);
+  init() {
+    // Create Container
+    this.elements.container = document.createElement('div');
+    this.elements.container.className = 'container';
+    document.body.append(this.elements.container);
 
-const description = document.createElement('div');
-description.className = 'description';
-description.innerHTML = 'Для смены раскладки нажмите "֎"';
-container.prepend(description);
+    // Create Description
+    this.elements.description = document.createElement('p');
+    this.elements.description.className = 'description';
+    this.elements.description.innerHTML = 'Для смены раскладки нажмите "֎"';
+    this.elements.container.append(this.elements.description);
+
+    // Create Textarea
+    this.elements.textarea = document.createElement('textarea');
+    this.elements.textarea.className = 'textarea';
+    this.elements.container.append(this.elements.textarea);
+
+    // Create Keyboard
+    this.elements.keyboard = document.createElement('div');
+    this.elements.keyboard.className = 'keyboard';
+    this.elements.container.append(this.elements.keyboard);
+
+    // Create Keys
+    this.elements.keyboard.appendChild(this.createKeys());
+  },
 
 
-// // Get key on keyboard
+  createKeys() {
+    const fragment = document.createDocumentFragment();
+    const engKeys = [
+      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
+      'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\',
+      'CapsLk', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter',
+      'LShift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '⮝', 'RShift',
+      'LCtrl', '֎', 'Win', 'LAlt', 'Space', 'RAlt', 'RCtrl', '⮜', '⮟', '⮞',
+    ];
+    const rusKeys = [
+      'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_', '+', 'Backspace',
+      'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\',
+      'CapsLk', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter',
+      'LShift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '⮝', 'RShift',
+      'LCtrl', '֎', 'Win', 'Alt', 'Space', 'Alt', 'RCtrl', '⮜', '⮟', '⮞',
+    ];
 
-const engKeys = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
-  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '⮝', 'Win', 'Alt', 'Alt', '⮜', '⮟', '⮞',
-];
+    rusKeys.forEach((key) => {
+      const keyElement = document.createElement('button');
+      const insertLineBreak = ['Backspace', '\\', 'Enter', 'RShift'].indexOf(key) !== -1;
 
-const rusKeys = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_', '+',
-  'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '⮝', 'Win', 'Alt', 'Alt', '⮜', '⮟', '⮞',
-];
+      // Add attributes/classes
+      keyElement.setAttribute('type', 'button');
+      keyElement.classList.add('keyboard__key');
 
+      switch (key) {
+        case 'Backspace':
+          keyElement.classList.add('keyboard__key-wide');
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+          });
+          break;
 
-const wideKeys = ['Backspace', 'Tab', 'Caps', 'Enter', 'Shift', 'Ctrl'];
-const extraWideKeys = [''];
-const changeLanguageBtn = '֎';
+        case 'Tab':
+          keyElement.classList.add('keyboard__key-wide');
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += '     ';
+          });
+          break;
 
+        case 'CapsLk':
+          keyElement.classList.add('keyboard__key-caps-enter');
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+          });
+          break;
 
-function init() {
-  let out = '';
-  for (let i = 0; i < engKeys.length; i += 1) {
-    if (i === 13) {
-      // backspace, tab
-      out += `<button class="keyboard__key keyboard__key-wide">${(wideKeys[0])}</button>
-      <br>
-      <button class="keyboard__key keyboard__key-wide">${(wideKeys[1])}</button>`;
-    }
+        case 'Enter':
+          keyElement.classList.add('keyboard__key-caps-enter');
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+          });
+          break;
 
-    // capslock
-    if (i === 26) {
-      out += `<br>
-      <button class="keyboard__key keyboard__key-caps-enter">${(wideKeys[2])}</button>`;
-    }
+        case 'LShift':
+          keyElement.classList.add('keyboard__key-left-shift');
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+          });
+          break;
 
-    // enter, L-shift
-    if (i === 37) {
-      out += `<button class="keyboard__key keyboard__key-caps-enter">${(wideKeys[3])}</button>
-      <br>
-      <button class="keyboard__key keyboard__key-left-shift">${(wideKeys[4])}</button>`;
-    }
+        case 'LCtrl':
+          keyElement.classList.add('keyboard__key-wide');
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+          });
+          break;
 
-    // R-shift, L-ctrl
-    if (i === 48) {
-      out += `<button class="keyboard__key">${(wideKeys[4])}</button>
-      <br>
-      <button class="keyboard__key keyboard__key-wide">${(wideKeys[5])}</button>`;
-    }
+        case 'Space':
+          keyElement.classList.add('keyboard__key-extra-wide');
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += ' ';
+          });
+          break;
 
-    // change-languge
-    if (i === 48) {
-      out += `<button id="changeLanguage" class="keyboard__key change-language-key">${(changeLanguageBtn)}</button>`;
-    }
+        default:
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+          });
+      }
 
-    // spacebar
-    if (i === 50) {
-      out += `<button class="keyboard__key keyboard__key-extra-wide">${(extraWideKeys[0])}</button>`;
-    }
-
-    // R-ctrl
-    if (i === 51) {
-      out += `<button class="keyboard__key">${(wideKeys[5])}</button>`;
-    }
-
-    out += `<button class="keyboard__key">${(engKeys[i])}</button>`;
-  }
-  document.querySelector('.keyboard__keys').innerHTML = out;
-}
-init();
-
-document.onkeypress = function (event) {
-  textarea.innerHTML += document.querySelector('.keyboard__key').innerHTML;
-  document.querySelector('.keyboard__key').forEach((elem) => {
-    elem.classList.remove('active');
-  });
-  document.querySelector('.keyboard__key').classList.add('active');
+      fragment.append(keyElement);
+      if (insertLineBreak) {
+        fragment.appendChild(document.createElement('br'));
+      }
+    });
+    return fragment;
+  },
 };
+
+window.addEventListener('DOMContentLoaded', () => {
+  keyboardLayout.init();
+});
