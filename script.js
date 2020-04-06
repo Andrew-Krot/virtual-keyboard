@@ -16,11 +16,6 @@ const keyboardLayout = {
     keys: [],
   },
 
-  eventHandlers: {
-    oninput: null,
-    onclose: null,
-  },
-
   properties: {
     value: '',
     capslock: false,
@@ -41,6 +36,7 @@ const keyboardLayout = {
     // Create Textarea
     this.elements.textarea = document.createElement('textarea');
     this.elements.textarea.className = 'textarea';
+    this.elements.textarea.setAttribute('autofocus', '');
     this.elements.container.append(this.elements.textarea);
 
     // Create Keyboard
@@ -63,14 +59,13 @@ const keyboardLayout = {
       'LCtrl', '֎', 'Win', 'LAlt', 'Space', 'RAlt', 'RCtrl', '⮜', '⮟', '⮞',
     ];
     const rusKeys = [
-      'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_', '+', 'Backspace',
+      'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', 'Backspace',
       'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\',
       'CapsLk', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter',
       'LShift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '⮝', 'RShift',
       'LCtrl', '֎', 'Win', 'Alt', 'Space', 'Alt', 'RCtrl', '⮜', '⮟', '⮞',
     ];
-
-    rusKeys.forEach((key) => {
+    engKeys.forEach((key) => {
       const keyElement = document.createElement('button');
       const insertLineBreak = ['Backspace', '\\', 'Enter', 'RShift'].indexOf(key) !== -1;
 
@@ -81,65 +76,117 @@ const keyboardLayout = {
       switch (key) {
         case 'Backspace':
           keyElement.classList.add('keyboard__key-wide');
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
-            this.elements.textarea.innerHTML += key;
+            this.elements.textarea.innerHTML = '';
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         case 'Tab':
           keyElement.classList.add('keyboard__key-wide');
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
             this.elements.textarea.innerHTML += '     ';
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         case 'CapsLk':
           keyElement.classList.add('keyboard__key-caps-enter');
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
             this.elements.textarea.innerHTML += key;
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         case 'Enter':
           keyElement.classList.add('keyboard__key-caps-enter');
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
-            this.elements.textarea.innerHTML += key;
+            this.elements.textarea.innerHTML += '\n';
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         case 'LShift':
           keyElement.classList.add('keyboard__key-left-shift');
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
             this.elements.textarea.innerHTML += key;
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         case 'LCtrl':
           keyElement.classList.add('keyboard__key-wide');
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
             this.elements.textarea.innerHTML += key;
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
+          });
+          break;
+
+        case '֎':
+          keyElement.setAttribute('data', key);
+          keyElement.textContent = key;
+          keyElement.addEventListener('click', () => {
+            this.elements.textarea.innerHTML += key;
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         case 'Space':
           keyElement.classList.add('keyboard__key-extra-wide');
+          keyElement.setAttribute('data', key);
           keyElement.addEventListener('click', () => {
             this.elements.textarea.innerHTML += ' ';
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
           break;
 
         default:
+          keyElement.setAttribute('data', key);
           keyElement.textContent = key;
           keyElement.addEventListener('click', () => {
             this.elements.textarea.innerHTML += key;
+            document.querySelectorAll('.keyboard__key').forEach((element) => {
+              element.classList.remove('active');
+            });
           });
       }
+
+      // Click real keyboard
+      document.onkeypress = (event) => {
+        this.elements.textarea.innerHTML += event.key;
+        document.querySelectorAll('.keyboard__key').forEach((element) => {
+          element.classList.remove('active');
+        });
+        document.querySelector(`.keyboard__key[data = "${event.key}"]`).classList.add('active');
+      };
 
       fragment.append(keyElement);
       if (insertLineBreak) {
