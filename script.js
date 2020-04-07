@@ -55,8 +55,8 @@ const keyboardLayout = {
       '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
       'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\',
       'CapsLk', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter',
-      'LShift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '⮝', 'RShift',
-      'LCtrl', '֎', 'Win', 'LAlt', 'Space', 'RAlt', 'RCtrl', '⮜', '⮟', '⮞',
+      'LShift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '&#8593', 'RShift',
+      'LCtrl', 'LAlt', 'Space', 'RAlt', 'RCtrl', '&#8592', '&#8595', '&#8594',
     ];
     const rusKeys = [
       'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', 'Backspace',
