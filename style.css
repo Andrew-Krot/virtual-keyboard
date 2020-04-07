@@ -24,6 +24,7 @@ li {
 }
 
 .textarea {
+  margin-top: 50px;
   width: 100%;
   height: 250px;
   resize: none;
@@ -79,7 +80,7 @@ li {
 }
 
 .keyboard__key-extra-wide {
-  width: 274px;
+  width: 385px;
 }
 
 .keyboard__key-activatable::after {
